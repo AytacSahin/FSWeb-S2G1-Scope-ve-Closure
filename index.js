@@ -18,7 +18,7 @@
 function ilkiniDon(stringArray, callback) {
   return callback(stringArray[0])
 }
-console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin+metin}));
+console.log('örnek görev:', ilkiniDon(['AY','TAÇ', 'ŞAH', 'İN'],function(metin){return metin+metin}));
 
 // Başlangıç Challenge'ı Sonu
 
@@ -43,8 +43,8 @@ function skorArtirici() {
    return skor++;
   }
 }
-
 const skor1 = skorArtirici();
+// console.log("skor-1 yontemi ile >", skor1());
 
 // skor2 kodları
 let skor = 0;
@@ -52,7 +52,13 @@ let skor = 0;
 function skor2() {
   return skor++;
 }
+// console.log("skor-2 yontemi ile >", skor2());
 
+////Skor 1 Cevaplarım:
+//1. skor1 ve skor2 arasında en önemli fark, skor 1'in fonksiyon içinde fonksiyon olması. Fonksiyon ile çağırıldığında, içerisinde fonksiyona return ile giderek closure çalıştırması. skor 2 ise baya baya dümdüz basit bir şekilde, fonksiyon çalıştığında hesap yapan, basit bir fonksiyon.  
+//2. skor1 closure kullanmakta. return ile yeni bir fonksiyon çağırması, bu çağırılan fonksiyonun içindeki değişkenleri, diğer hiç bir fonksiyonun kullanmamasının sağlanması gibi amaçlar sebebiyle kurulmuş bir yöntem.
+//3. skor1 ve skor2 her ikisi de aynı sonucu alırız. Tekrarlı işlemlerde, sürekli skoru arttırmak istiyorsak, fonksiyon içindeki fonksiyonu tek bir satır ile çağırarak çok büyük işlem kolaylığı sağlarız. Ama yok, bu işlemi bir defaya mahsus yapıcak isek, skor2 kullanılabilir. 
+console.log("Görev 1 > Sorular cevaplandı.")
 
 /* Görev 2: takimSkoru() 
 Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
@@ -64,11 +70,12 @@ Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
 Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyonu olarak da kullanılacak
 */
 
-function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+function takimSkoru(){
+  let skorTekCeyrek = Math.floor(Math.random() * (25 - 10) + 10);
+  return skorTekCeyrek;
 }
-
-
+takimSkoru();
+console.log("Görev 2 > Tek Bir Periyot İçin Bulunan Skor Değeri:", takimSkoru());
 
 
 /* Görev 3: macSonucu() 
@@ -86,13 +93,19 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
 }
 */ 
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
+function macSonucu(eskiFonksiyonum, ceyrekSayisi){
+  let birinciTakimSkoru = 0;
+  for (let i = 0; i < ceyrekSayisi; i++) {
+    birinciTakimSkoru += eskiFonksiyonum(i);
+  }
+  let ikinciTakimSkoru = 0;
+  for (let i = 0; i < ceyrekSayisi; i++) {
+    ikinciTakimSkoru += eskiFonksiyonum(i);
+  }
+  return {EvSahibi: birinciTakimSkoru, KonukTakim: ikinciTakimSkoru};
 }
-
-
-
-
+macSonucu(takimSkoru, 4);
+console.log("Görev 3 > Takımların Maç Sonu Skor Tablosu:", macSonucu(takimSkoru, 4));
 
 
 /* Zorlayıcı Görev 4: periyotSkoru()
@@ -108,12 +121,13 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
 }
   */
 
-
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
-
+function periyotSkoru(fonk) {
+  let birinciTakimbirper = fonk();
+  let ikinciTakimbirper = fonk();
+  return {EvSahibi: birinciTakimbirper, KonukTakim: ikinciTakimbirper};
 }
-
+periyotSkoru(takimSkoru);
+console.log("Görev 4 > Takımların 1 Periyottaki Skor Tablosu:", periyotSkoru(takimSkoru));
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
 Aşağıdaki skorTabelasi() fonksiyonunu kullanarak aşağıdakileri yapınız:
@@ -146,9 +160,35 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
+function skorTabelasi(fffonks, periyotSayisi) {
+  let skorBoard = [];
+  let yeniTabela = [];
+  for (let i = 1; i < periyotSayisi+1; i++) {
+    skorBoard.push(fffonks(), fffonks());
+    if ((skorBoard[0] + skorBoard[1] + skorBoard[2] + skorBoard[3]) != (skorBoard[4] + skorBoard[5] + skorBoard[6] + skorBoard[7])) {
+      yeniTabela = [
+        "1. Periyot: Ev Sahibi " + skorBoard[0] + " - Konuk Takım " + skorBoard[4],
+        "2. Periyot: Ev Sahibi " + skorBoard[1] + " - Konuk Takım " + skorBoard[5],
+        "3. Periyot: Ev Sahibi " + skorBoard[2] + " - Konuk Takım " + skorBoard[6],
+        "4. Periyot: Ev Sahibi " + skorBoard[3] + " - Konuk Takım " + skorBoard[7],
+        "Maç Sonucu: Ev Sahibi " + (skorBoard[0] + skorBoard[1] + skorBoard[2] + skorBoard[3]) + " - Konuk Takım " + (skorBoard[4] + skorBoard[5] + skorBoard[6] + skorBoard[7])
+      ];
+    } else {
+      skorBoard.push(fffonks(), fffonks());
+      yeniTabela = [
+        "1. Periyot: Ev Sahibi " + skorBoard[0] + " - Konuk Takım " + skorBoard[4],
+        "2. Periyot: Ev Sahibi " + skorBoard[1] + " - Konuk Takım " + skorBoard[5],
+        "3. Periyot: Ev Sahibi " + skorBoard[2] + " - Konuk Takım " + skorBoard[6],
+        "4. Periyot: Ev Sahibi " + skorBoard[3] + " - Konuk Takım " + skorBoard[7],
+        "1. Uzatma: " + skorBoard[8] + " - Konuk Takım " + skorBoard[9],
+        "Maç Sonucu: Ev Sahibi " + (skorBoard[0] + skorBoard[1] + skorBoard[2] + skorBoard[3] + skorBoard[8]) + " - Konuk Takım " + (skorBoard[4] + skorBoard[5] + skorBoard[6] + skorBoard[7] + skorBoard[9])
+      ];
+    }
+  }
+  return yeniTabela
 }
+skorTabelasi(takimSkoru, 4);
+console.log(skorTabelasi(takimSkoru, 4));
 
 
 
